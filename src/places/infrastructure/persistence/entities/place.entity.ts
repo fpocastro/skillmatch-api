@@ -24,15 +24,15 @@ export class PlaceEntity extends EntityRelationalHelper {
   @Column({ type: String, nullable: false })
   address: string;
 
-  @Column({ type: Boolean, default: true, nullable: false })
+  @Column({ name: 'is_active', type: Boolean, default: true, nullable: false })
   isActive: boolean;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: Date;
 }
