@@ -8,6 +8,7 @@ import appConfig from './config/app/app.config';
 import databaseConfig from './config/database/database.config';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
       },
     }),
     PlaceModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
