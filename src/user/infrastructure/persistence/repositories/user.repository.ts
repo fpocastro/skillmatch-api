@@ -78,6 +78,22 @@ export class UserRepository {
     return entity ? UserMapper.toDomain(entity) : null;
   }
 
+  async findBySub(sub: User['sub']): Promise<NullableType<User>> {
+    const entity = await this.userRepository.findOne({
+      where: { sub },
+    });
+
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
+
+  async findByEmail(email: User['email']): Promise<NullableType<User>> {
+    const entity = await this.userRepository.findOne({
+      where: { email },
+    });
+
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
+
   async create(data: User): Promise<User> {
     const persistenceModel = UserMapper.toPersistence(data);
     const newEntity = await this.userRepository.save(

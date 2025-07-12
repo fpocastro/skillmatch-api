@@ -5,7 +5,7 @@ import { IsOptional } from 'class-validator';
 export class UpdateUserDto {
   @ApiProperty({
     type: String,
-    example: 'user@mail.com',
+    example: 'test@example.com',
   })
   @Type(() => String)
   @IsOptional()

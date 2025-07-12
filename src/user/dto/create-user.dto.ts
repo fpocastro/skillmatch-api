@@ -5,12 +5,20 @@ import { IsEmail, IsNotEmpty } from 'class-validator';
 export class CreateUserDto {
   @ApiProperty({
     type: String,
-    example: 'user@mail.com',
+    example: 'test@example.com',
   })
   @Type(() => String)
   @IsEmail()
   @IsNotEmpty()
   email: string;
+
+  @ApiProperty({
+    type: String,
+  })
+  @Type(() => String)
+  @IsEmail()
+  @IsNotEmpty()
+  sub: string;
 
   @ApiProperty({
     type: String,

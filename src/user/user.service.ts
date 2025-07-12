@@ -15,6 +15,7 @@ export class UserService {
     const user = new User();
 
     user.email = createUserDto.email;
+    user.sub = createUserDto.sub;
     user.firstName = createUserDto.firstName;
     user.lastName = createUserDto.lastName;
 
@@ -39,6 +40,14 @@ export class UserService {
 
   findById(id: User['id']): Promise<NullableType<User>> {
     return this.userRepository.findById(id);
+  }
+
+  findBySub(sub: User['sub']): Promise<NullableType<User>> {
+    return this.userRepository.findBySub(sub);
+  }
+
+  findByEmail(email: User['email']): Promise<NullableType<User>> {
+    return this.userRepository.findByEmail(email);
   }
 
   findManyByName(name: string): Promise<NullableType<User[]>> {
