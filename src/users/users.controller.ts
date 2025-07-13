@@ -23,7 +23,7 @@ import {
 } from 'src/utils/dto/infinity-pagination-response.dto';
 import { infinityPagination } from 'src/utils/infinity-pagination';
 import { NullableType } from 'src/utils/types/nullable.type';
-import { UserService } from './user.service';
+import { UsersService } from './users.service';
 import { User } from './domain/user';
 import { QueryUserDto } from './dto/query-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -31,11 +31,11 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('Users')
 @Controller({
-  path: 'user',
+  path: 'users',
   version: '1',
 })
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
 
   @ApiOkResponse({
     type: InfinityPaginationResponse(User),
@@ -55,7 +55,7 @@ export class UserController {
     }
 
     return infinityPagination(
-      await this.userService.findManyWithPagination({
+      await this.usersService.findManyWithPagination({
         filterOptions: query?.filters,
         sortOptions: query?.sort,
         paginationOptions: {
@@ -81,7 +81,7 @@ export class UserController {
     required: true,
   })
   findOne(@Param('id') id: User['id']): Promise<NullableType<User>> {
-    return this.userService.findById(id);
+    return this.usersService.findById(id);
   }
 
   @ApiCreatedResponse({
@@ -93,7 +93,7 @@ export class UserController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.userService.create(createUserDto);
+    return this.usersService.create(createUserDto);
   }
 
   @ApiOkResponse({
@@ -113,7 +113,7 @@ export class UserController {
     @Param('id') id: User['id'],
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User | null> {
-    return this.userService.update(id, updateUserDto);
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
@@ -124,6 +124,6 @@ export class UserController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: User['id']): Promise<void> {
-    return this.userService.remove(id);
+    return this.usersService.remove(id);
   }
 }

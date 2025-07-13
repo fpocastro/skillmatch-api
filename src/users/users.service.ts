@@ -8,7 +8,7 @@ import { FilterUserDto, SortUserDto } from './dto/query-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { PlaceController } from './places.controller';
-import { PlaceService } from './places.service';
+import { PlacesController } from './places.controller';
+import { PlacesService } from './places.service';
 import { PlacePersistenceModule } from './infrastructure/persistence/persistence.module';
 
 @Module({
   imports: [PlacePersistenceModule],
-  controllers: [PlaceController],
-  providers: [PlaceService],
-  exports: [PlaceService, PlacePersistenceModule],
+  controllers: [PlacesController],
+  providers: [PlacesService],
+  exports: [PlacesService, PlacePersistenceModule],
 })
-export class PlaceModule {}
+export class PlacesModule {}

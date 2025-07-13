@@ -17,7 +17,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { PlaceService } from './places.service';
+import { PlacesService } from './places.service';
 import { Place } from './domain/place';
 import { QueryPlaceDto } from './dto/query-place.dto';
 import {
@@ -31,11 +31,11 @@ import { CreatePlaceDto } from './dto/create-place.dto';
 
 @ApiTags('Places')
 @Controller({
-  path: 'place',
+  path: 'places',
   version: '1',
 })
-export class PlaceController {
-  constructor(private readonly placeService: PlaceService) {}
+export class PlacesController {
+  constructor(private readonly placesService: PlacesService) {}
 
   @ApiOkResponse({
     type: InfinityPaginationResponse(Place),
@@ -55,7 +55,7 @@ export class PlaceController {
     }
 
     return infinityPagination(
-      await this.placeService.findManyWithPagination({
+      await this.placesService.findManyWithPagination({
         filterOptions: query?.filters,
         sortOptions: query?.sort,
         paginationOptions: {
@@ -81,7 +81,7 @@ export class PlaceController {
     required: true,
   })
   findOne(@Param('id') id: Place['id']): Promise<NullableType<Place>> {
-    return this.placeService.findById(id);
+    return this.placesService.findById(id);
   }
 
   @ApiCreatedResponse({
@@ -93,7 +93,7 @@ export class PlaceController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createPlaceDto: CreatePlaceDto): Promise<Place> {
-    return this.placeService.create(createPlaceDto);
+    return this.placesService.create(createPlaceDto);
   }
 
   @ApiOkResponse({
@@ -113,7 +113,7 @@ export class PlaceController {
     @Param('id') id: Place['id'],
     @Body() updatePlaceDto: UpdatePlaceDto,
   ): Promise<Place | null> {
-    return this.placeService.update(id, updatePlaceDto);
+    return this.placesService.update(id, updatePlaceDto);
   }
 
   @Delete(':id')
@@ -124,6 +124,6 @@ export class PlaceController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: Place['id']): Promise<void> {
-    return this.placeService.remove(id);
+    return this.placesService.remove(id);
   }
 }

@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { EmailSignInDto } from './dto/email-signin.dto';
 import { SignInResponseDto } from './dto/signin-response.dto';
 import { EmailSignUpDto } from './dto/email-signup.dto';
-import { User } from 'src/user/domain/user';
+import { User } from 'src/users/domain/user';
 
 @ApiTags('Auth')
 @Controller({

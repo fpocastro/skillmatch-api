@@ -4,9 +4,9 @@ import { FindOptionsWhere, Repository } from 'typeorm';
 import { NullableType } from 'src/utils/types/nullable.type';
 import { IPaginationOptions } from 'src/utils/interfaces/pagination-options.interface';
 import { UserEntity } from '../entities/user.entity';
-import { User } from 'src/user/domain/user';
+import { User } from 'src/users/domain/user';
 import { UserMapper } from '../mapper/user.mapper';
-import { FilterUserDto, SortUserDto } from 'src/user/dto/query-user.dto';
+import { FilterUserDto, SortUserDto } from 'src/users/dto/query-user.dto';
 
 @Injectable()
 export class UserRepository {

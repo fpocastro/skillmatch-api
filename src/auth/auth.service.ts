@@ -3,24 +3,24 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
+import { UsersService } from 'src/users/users.service';
 import { EmailSignInDto } from './dto/email-signin.dto';
 import { SignInResponseDto } from './dto/signin-response.dto';
 import { AuthCognitoService } from 'src/auth-cognito/auth-cognito.service';
 import { EmailSignUpDto } from './dto/email-signup.dto';
-import { User } from 'src/user/domain/user';
+import { User } from 'src/users/domain/user';
 
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
   constructor(
-    private readonly userService: UserService,
+    private readonly usersService: UsersService,
     private readonly authCognitoService: AuthCognitoService,
   ) {}
 
   async signIn(signInDto: EmailSignInDto): Promise<SignInResponseDto> {
-    const user = await this.userService.findByEmail(signInDto.email);
+    const user = await this.usersService.findByEmail(signInDto.email);
     if (!user) {
       throw new InternalServerErrorException('User not found');
     }
@@ -49,7 +49,7 @@ export class AuthService {
         password: signUpDto.password,
       });
 
-      const user = await this.userService.create({
+      const user = await this.usersService.create({
         email: signUpDto.email,
         sub: sub,
         firstName: signUpDto.firstName,

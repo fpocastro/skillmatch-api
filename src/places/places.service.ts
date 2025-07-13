@@ -8,7 +8,7 @@ import { IPaginationOptions } from 'src/utils/interfaces/pagination-options.inte
 import { UpdatePlaceDto } from './dto/update-place.dto';
 
 @Injectable()
-export class PlaceService {
+export class PlacesService {
   constructor(private readonly placeRepository: PlaceRepository) {}
 
   async create(createPlaceDto: CreatePlaceDto): Promise<Place> {
