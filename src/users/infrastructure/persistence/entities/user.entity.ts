@@ -1,9 +1,11 @@
+import { RoleEntity } from 'src/roles/infrastructure/persistence/entities/role.entity';
 import { EntityRelationalHelper } from 'src/utils/relational-entity-helper';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -26,6 +28,11 @@ export class UserEntity extends EntityRelationalHelper {
 
   @Column({ name: 'last_name', type: String, nullable: false })
   lastName: string;
+
+  @ManyToOne(() => RoleEntity, {
+    eager: true,
+  })
+  role: RoleEntity;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

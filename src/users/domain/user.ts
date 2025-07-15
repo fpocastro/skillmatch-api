@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Role } from 'src/roles/domain/role';
 
 export class User {
   @ApiProperty({
@@ -28,6 +29,9 @@ export class User {
     example: 'Smith',
   })
   lastName: string;
+
+  @ApiProperty({ type: Role })
+  role: Role;
 
   @ApiProperty()
   createdAt: Date;

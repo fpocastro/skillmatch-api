@@ -1,15 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class Place {
-  @ApiProperty({
-    type: String,
-  })
+  @ApiProperty({ type: String })
   id: string;
 
-  @ApiProperty({
-    type: String,
-    example: 'Cool Soccer Field',
-  })
+  @ApiProperty({ type: String, example: 'Cool Soccer Field' })
   name: string;
 
   @ApiProperty({
@@ -24,10 +19,7 @@ export class Place {
   })
   address: string;
 
-  @ApiProperty({
-    type: Boolean,
-    example: true,
-  })
+  @ApiProperty({ type: Boolean, example: true })
   isActive: boolean;
 
   @ApiProperty()

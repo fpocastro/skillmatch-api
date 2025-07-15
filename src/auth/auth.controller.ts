@@ -29,7 +29,7 @@ export class AuthController {
   })
   @Post('signup/email')
   @HttpCode(HttpStatus.CREATED)
-  signUp(@Body() emailSignUpDto: EmailSignUpDto): Promise<User> {
+  public signUp(@Body() emailSignUpDto: EmailSignUpDto): Promise<User> {
     return this.authService.signUp(emailSignUpDto);
   }
 }

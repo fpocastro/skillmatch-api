@@ -11,6 +11,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import authConfig from './config/auth/auth.config';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import authConfig from './config/auth/auth.config';
     PlacesModule,
     UsersModule,
     AuthModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

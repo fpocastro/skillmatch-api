@@ -1,3 +1,4 @@
+import { RoleMapper } from 'src/roles/infrastructure/persistence/mapper/role.mapper';
 import { UserEntity } from '../entities/user.entity';
 import { User } from 'src/users/domain/user';
 
@@ -10,6 +11,7 @@ export class UserMapper {
     domainEntity.email = raw.email;
     domainEntity.firstName = raw.firstName;
     domainEntity.lastName = raw.lastName;
+    domainEntity.role = RoleMapper.toDomain(raw.role);
     domainEntity.createdAt = raw.createdAt;
     domainEntity.updatedAt = raw.updatedAt;
     domainEntity.deletedAt = raw.deletedAt;
@@ -25,6 +27,7 @@ export class UserMapper {
     persistenceEntity.email = domainEntity.email;
     persistenceEntity.firstName = domainEntity.firstName;
     persistenceEntity.lastName = domainEntity.lastName;
+    persistenceEntity.role = RoleMapper.toPersistence(domainEntity.role);
     persistenceEntity.createdAt = domainEntity.createdAt;
     persistenceEntity.updatedAt = domainEntity.updatedAt;
     persistenceEntity.deletedAt = domainEntity.deletedAt;
