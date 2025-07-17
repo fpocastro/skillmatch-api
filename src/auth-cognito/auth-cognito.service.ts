@@ -124,7 +124,9 @@ export class AuthCognitoService {
         'Sign-in failed: Invalid response from Cognito: ' +
           JSON.stringify(response),
       );
-      throw new Error('Sign-in failed: Invalid response from Cognito');
+      throw new InternalServerErrorException(
+        'Sign-in failed: Invalid response from Cognito',
+      );
     }
   }
 

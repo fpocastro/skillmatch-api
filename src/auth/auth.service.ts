@@ -38,6 +38,7 @@ export class AuthService {
         user,
       };
     } catch (err) {
+      this.logger.error('Sign-in failed: ' + JSON.stringify(err));
       throw new InternalServerErrorException(err);
     }
   }
