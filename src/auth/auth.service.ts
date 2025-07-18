@@ -62,4 +62,14 @@ export class AuthService {
       throw new InternalServerErrorException(err);
     }
   }
+
+  async getUserData(sub: string): Promise<User> {
+    const user = await this.usersService.findBySub(sub);
+
+    if (!user) {
+      throw new InternalServerErrorException('User not found');
+    }
+
+    return user;
+  }
 }
