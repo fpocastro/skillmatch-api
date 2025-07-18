@@ -20,9 +20,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const userPoolId = configService.getOrThrow('auth.cognitoUserPoolId', {
       infer: true,
     });
-    const clientId = configService.getOrThrow('auth.cognitoClientId', {
-      infer: true,
-    });
 
     super({
       secretOrKeyProvider: passportJwtSecret({
@@ -32,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         jwksUri: `https://cognito-idp.${region}.amazonaws.com/${userPoolId}/.well-known/jwks.json`,
       }),
       ignoreExpiration: false,
-      audience: clientId,
+      // audience: clientId, // cognito tokens don't have aud property
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       issuer: `https://cognito-idp.${region}.amazonaws.com/${userPoolId}`,
       algorithms: ['RS256'],
