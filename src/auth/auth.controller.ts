@@ -57,7 +57,7 @@ export class AuthController {
   })
   @Get('me')
   @HttpCode(HttpStatus.OK)
-  findOne(@Request() request): Promise<User> {
+  me(@Request() request): Promise<User> {
     return this.authService.getUserData(request.user.sub);
   }
 }
