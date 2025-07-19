@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { NullableType } from '../utils/types/nullable.type';
 import { IPaginationOptions } from 'src/utils/interfaces/pagination-options.interface';
 import { UserRepository } from './infrastructure/persistence/repositories/user.repository';
@@ -6,10 +6,15 @@ import { User } from './domain/user';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FilterUserDto, SortUserDto } from './dto/query-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { RolesService } from '../roles/roles.service';
+import { RolesEnum } from 'src/roles/enums/roles.enum';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly rolesService: RolesService,
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const user = new User();
@@ -18,6 +23,14 @@ export class UsersService {
     user.sub = createUserDto.sub;
     user.firstName = createUserDto.firstName;
     user.lastName = createUserDto.lastName;
+
+    const userRole = await this.rolesService.findByName(RolesEnum.USER);
+    if (!userRole) {
+      throw new InternalServerErrorException(
+        `${RolesEnum.USER} role not found`,
+      );
+    }
+    user.role = userRole;
 
     return this.userRepository.create(user);
   }
