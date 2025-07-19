@@ -5,9 +5,7 @@ import {
 } from '@nestjs/common';
 import {
   CognitoIdentityProviderClient,
-  AdminInitiateAuthCommand,
   AdminGetUserCommand,
-  AuthFlowType,
   AdminCreateUserCommandInput,
   AdminCreateUserCommand,
   AdminSetUserPasswordCommand,
@@ -15,9 +13,6 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { AllConfigType } from 'src/config/config.type';
 import { ICognitoSignUpData } from './interfaces/cognito-signup-data.interface';
-import { ICognitoSignInData } from './interfaces/cognito-signin-data.interface';
-import { ICognitoSignInResponse } from './interfaces/cognito-signin-response.interface';
-import { createHmac } from 'crypto';
 
 @Injectable()
 export class AuthCognitoService {
@@ -34,10 +29,6 @@ export class AuthCognitoService {
     this.clientId = this.configService.getOrThrow('auth.cognitoClientId', {
       infer: true,
     });
-    this.clientSecret = this.configService.getOrThrow(
-      'auth.cognitoClientSecret',
-      { infer: true },
-    );
     const awsRegion = this.configService.getOrThrow('auth.cognitoAwsRegion', {
       infer: true,
     });
@@ -87,49 +78,6 @@ export class AuthCognitoService {
     }
   }
 
-  async signIn(
-    signInData: ICognitoSignInData,
-  ): Promise<ICognitoSignInResponse> {
-    const command = new AdminInitiateAuthCommand({
-      UserPoolId: this.userPoolId,
-      ClientId: this.clientId,
-      AuthFlow: AuthFlowType.ADMIN_USER_PASSWORD_AUTH,
-      AuthParameters: {
-        USERNAME: signInData.email,
-        PASSWORD: signInData.password,
-        SECRET_HASH: this.calculateSecretHash(
-          signInData.email,
-          this.clientId,
-          this.clientSecret,
-        ),
-      },
-    });
-
-    const response = (await this.client.send(command)).AuthenticationResult;
-
-    if (
-      response?.AccessToken &&
-      response?.IdToken &&
-      response?.RefreshToken &&
-      response?.ExpiresIn
-    ) {
-      return {
-        accessToken: response.AccessToken,
-        idToken: response.IdToken,
-        refreshToken: response.RefreshToken,
-        expiresIn: response.ExpiresIn,
-      };
-    } else {
-      this.logger.error(
-        'Sign-in failed: Invalid response from Cognito: ' +
-          JSON.stringify(response),
-      );
-      throw new InternalServerErrorException(
-        'Sign-in failed: Invalid response from Cognito',
-      );
-    }
-  }
-
   async getUser(sub: string) {
     const command = new AdminGetUserCommand({
       UserPoolId: this.userPoolId,
@@ -139,15 +87,5 @@ export class AuthCognitoService {
     const response = await this.client.send(command);
 
     return response.Username;
-  }
-
-  private calculateSecretHash(
-    username: string,
-    clientId: string,
-    clientSecret: string,
-  ): string {
-    const hmac = createHmac('sha256', clientSecret);
-    hmac.update(username + clientId);
-    return hmac.digest('base64');
   }
 }
