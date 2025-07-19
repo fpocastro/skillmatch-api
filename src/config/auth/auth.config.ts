@@ -12,9 +12,6 @@ class EnvironmentVariablesValidator {
 
   @IsString()
   COGNITO_CLIENT_ID: string;
-
-  @IsString()
-  COGNITO_CLIENT_SECRET: string;
 }
 
 export default registerAs<AuthConfig>('auth', () => {
@@ -24,6 +21,5 @@ export default registerAs<AuthConfig>('auth', () => {
     cognitoAwsRegion: process.env.COGNITO_AWS_REGION,
     cognitoUserPoolId: process.env.COGNITO_USER_POOL_ID,
     cognitoClientId: process.env.COGNITO_CLIENT_ID,
-    cognitoClientSecret: process.env.COGNITO_CLIENT_SECRET,
   };
 });

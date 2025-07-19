@@ -18,15 +18,10 @@ import { ICognitoSignUpData } from './interfaces/cognito-signup-data.interface';
 export class AuthCognitoService {
   private readonly client: CognitoIdentityProviderClient;
   private readonly userPoolId: string;
-  private readonly clientId: string;
-  private readonly clientSecret: string;
   private readonly logger = new Logger(AuthCognitoService.name);
 
   constructor(private readonly configService: ConfigService<AllConfigType>) {
     this.userPoolId = this.configService.getOrThrow('auth.cognitoUserPoolId', {
-      infer: true,
-    });
-    this.clientId = this.configService.getOrThrow('auth.cognitoClientId', {
       infer: true,
     });
     const awsRegion = this.configService.getOrThrow('auth.cognitoAwsRegion', {
