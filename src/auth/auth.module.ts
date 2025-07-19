@@ -6,7 +6,6 @@ import { AuthCognitoModule } from 'src/auth-cognito/auth-cognito.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { AnonymousStrategy } from './strategies/anonymous.strategy';
 
 @Module({
   imports: [
@@ -16,7 +15,7 @@ import { AnonymousStrategy } from './strategies/anonymous.strategy';
     JwtModule.register({}),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, AnonymousStrategy],
+  providers: [AuthService, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}
