@@ -29,5 +29,5 @@ export class Place {
   updatedAt: Date;
 
   @ApiProperty()
-  deletedAt: Date;
+  deletedAt?: Date;
 }

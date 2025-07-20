@@ -34,5 +34,5 @@ export class PlaceEntity extends EntityRelationalHelper {
   updatedAt: Date;
 
   @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt: Date;
+  deletedAt?: Date;
 }
