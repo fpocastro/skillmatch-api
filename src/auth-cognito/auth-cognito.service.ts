@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   CognitoIdentityProviderClient,
   AdminGetUserCommand,
@@ -13,6 +9,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { AllConfigType } from 'src/config/config.type';
 import { ICognitoSignUpData } from './interfaces/cognito-signup-data.interface';
+import { CognitoInternalError } from './exceptions/auth-cognito.exception';
 
 @Injectable()
 export class AuthCognitoService {
@@ -51,10 +48,7 @@ export class AuthCognitoService {
       const userSub = createUserResponse.User?.Username;
 
       if (!userSub) {
-        this.logger.error(
-          'Sign-up failed: ' + JSON.stringify(createUserResponse),
-        );
-        throw new Error('User creation failed: No username returned');
+        throw new Error(JSON.stringify(createUserResponse));
       }
 
       const setPasswordCommand = new AdminSetUserPasswordCommand({
@@ -69,18 +63,23 @@ export class AuthCognitoService {
       return userSub;
     } catch (e) {
       this.logger.error('Sign-up failed: ' + e);
-      throw new InternalServerErrorException('Sign-up failed');
+      throw new CognitoInternalError('Failed to create user account');
     }
   }
 
   async getUser(sub: string) {
-    const command = new AdminGetUserCommand({
-      UserPoolId: this.userPoolId,
-      Username: sub,
-    });
+    try {
+      const command = new AdminGetUserCommand({
+        UserPoolId: this.userPoolId,
+        Username: sub,
+      });
 
-    const response = await this.client.send(command);
+      const response = await this.client.send(command);
 
-    return response.Username;
+      return response.Username;
+    } catch (e) {
+      this.logger.error('Error retrieving user data: ' + e);
+      throw new CognitoInternalError('Failed to get user data');
+    }
   }
 }

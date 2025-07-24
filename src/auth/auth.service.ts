@@ -1,13 +1,11 @@
-import {
-  HttpException,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { AuthCognitoService } from 'src/auth-cognito/auth-cognito.service';
 import { EmailSignUpDto } from './dto/email-signup.dto';
 import { User } from 'src/users/domain/user';
+import { UserNotFoundException } from 'src/users/exceptions/users.exception';
+import { AppException } from 'src/utils/exceptions/app.exception';
+import { ErrorCode } from 'src/utils/exceptions/error-codes.enum';
 
 @Injectable()
 export class AuthService {
@@ -37,8 +35,13 @@ export class AuthService {
       if (err instanceof HttpException) {
         throw err;
       }
+
       this.logger.error('Error creating user account: ' + JSON.stringify(err));
-      throw new InternalServerErrorException(err);
+      throw new AppException(
+        'Failed to create user account',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        ErrorCode.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -46,7 +49,7 @@ export class AuthService {
     const user = await this.usersService.findBySub(sub);
 
     if (!user) {
-      throw new InternalServerErrorException('User not found');
+      throw new UserNotFoundException();
     }
 
     return user;

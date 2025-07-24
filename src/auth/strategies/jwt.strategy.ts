@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { passportJwtSecret } from 'jwks-rsa';
@@ -7,6 +7,7 @@ import { UsersService } from 'src/users/users.service';
 import { JwtPayload } from './types/jwt-payload.type';
 import { CurrentUser } from './types/current-user.type';
 import { AllConfigType } from 'src/config/config.type';
+import { UserNotFoundException } from 'src/users/exceptions/users.exception';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -40,7 +41,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user = await this.userService.findBySub(payload.sub);
 
     if (!user) {
-      throw new NotFoundException('User not found in database');
+      throw new UserNotFoundException();
     }
 
     return {

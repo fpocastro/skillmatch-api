@@ -1,4 +1,4 @@
-import { NestFactory, Reflector } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { useContainer } from 'class-validator';
 import { AllConfigType } from './config/config.type';
@@ -11,6 +11,7 @@ import {
 import validationOptions from './utils/validation-options';
 import { ResolvePromisesInterceptor } from './utils/interceptors/serializer.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { GlobalExceptionFilter } from './utils/exceptions/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -29,6 +30,7 @@ async function bootstrap() {
     new ResolvePromisesInterceptor(),
     new ClassSerializerInterceptor(app.get(Reflector)),
   );
+  app.useGlobalFilters(new GlobalExceptionFilter(app.get(HttpAdapterHost)));
 
   const options = new DocumentBuilder()
     .setTitle('API')

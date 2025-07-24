@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Reflector } from '@nestjs/core';
-import { ExecutionContext, ForbiddenException } from '@nestjs/common';
+import { ExecutionContext } from '@nestjs/common';
 import { RolesGuard } from 'src/roles/guards/roles.guards';
 import { RolesEnum } from 'src/roles/enums/roles.enum';
+import { InsufficientRolePermissionsException } from 'src/roles/exceptions/roles.exception';
 
 describe('RolesGuard', () => {
   let guard: RolesGuard;
@@ -64,7 +65,7 @@ describe('RolesGuard', () => {
       expect(guard.canActivate(mockContext)).toBe(true);
     });
 
-    it('should throw ForbiddenException if user does not have required role', () => {
+    it('should throw InsufficientRolePermissionsException if user does not have required role', () => {
       const mockRequest = {
         user: {
           role: RolesEnum.USER,
@@ -83,7 +84,9 @@ describe('RolesGuard', () => {
         .spyOn(reflector, 'getAllAndOverride')
         .mockReturnValue([RolesEnum.ADMIN]);
 
-      expect(() => guard.canActivate(mockContext)).toThrow(ForbiddenException);
+      expect(() => guard.canActivate(mockContext)).toThrow(
+        InsufficientRolePermissionsException,
+      );
     });
   });
 });

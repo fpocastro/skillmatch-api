@@ -7,6 +7,7 @@ import { NullableType } from 'src/utils/types/nullable.type';
 import { PlaceMapper } from '../mapper/place.mapper';
 import { IPaginationOptions } from 'src/utils/interfaces/pagination-options.interface';
 import { FilterPlaceDto, SortPlaceDto } from 'src/places/dto/query-place.dto';
+import { PlaceNotFoundException } from 'src/places/exceptions/places.exception';
 
 @Injectable()
 export class PlaceRepository {
@@ -75,7 +76,7 @@ export class PlaceRepository {
     });
 
     if (!entity) {
-      throw new Error('Place not found');
+      throw new PlaceNotFoundException();
     }
 
     const updatedEntity = await this.placeRepository.save(

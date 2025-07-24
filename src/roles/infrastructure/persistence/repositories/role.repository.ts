@@ -5,6 +5,7 @@ import { NullableType } from 'src/utils/types/nullable.type';
 import { RoleMapper } from '../mapper/role.mapper';
 import { Role } from 'src/roles/domain/role';
 import { RoleEntity } from '../entities/role.entity';
+import { RoleNotFoundException } from 'src/roles/exceptions/roles.exception';
 
 @Injectable()
 export class RoleRepository {
@@ -48,7 +49,7 @@ export class RoleRepository {
     const entity = await this.roleRepository.findOne({ where: { id } });
 
     if (!entity) {
-      throw new Error('Role not found');
+      throw new RoleNotFoundException();
     }
 
     const updatedEntity = await this.roleRepository.save(

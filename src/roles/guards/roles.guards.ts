@@ -1,7 +1,6 @@
 import {
   CanActivate,
   ExecutionContext,
-  ForbiddenException,
   Injectable,
   Logger,
 } from '@nestjs/common';
@@ -9,6 +8,7 @@ import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import { Request } from 'express';
 import { CurrentUser } from 'src/auth/strategies/types/current-user.type';
+import { InsufficientRolePermissionsException } from '../exceptions/roles.exception';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -30,7 +30,13 @@ export class RolesGuard implements CanActivate {
     const user = request.user as CurrentUser;
 
     if (!roles.includes(user.role)) {
-      throw new ForbiddenException('Insufficient role');
+      this.logger.warn(
+        `User ${user.id} with role ${user.role} tried to access a resource with insufficient permissions`,
+      );
+
+      throw new InsufficientRolePermissionsException(
+        'Action not allowed for this role',
+      );
     }
 
     return true;

@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { InternalServerErrorException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { UserRepository } from 'src/users/infrastructure/persistence/repositories/user.repository';
 import { RolesService } from 'src/roles/roles.service';
@@ -9,6 +8,7 @@ import { User } from 'src/users/domain/user';
 import { Role } from 'src/roles/domain/role';
 import { RolesEnum } from 'src/roles/enums/roles.enum';
 import { SortUserDto } from 'src/users/dto/query-user.dto';
+import { RoleNotFoundException } from 'src/roles/exceptions/roles.exception';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -94,7 +94,7 @@ describe('UsersService', () => {
       expect(result).toEqual(createdUser);
     });
 
-    it('should throw InternalServerErrorException if user role not found', async () => {
+    it('should throw RoleNotFoundException if user role not found', async () => {
       const createUserDto: CreateUserDto = {
         email: 'test@example.com',
         sub: 'test-sub',
@@ -105,7 +105,7 @@ describe('UsersService', () => {
       mockRolesService.findByName.mockResolvedValue(null);
 
       await expect(service.create(createUserDto)).rejects.toThrow(
-        InternalServerErrorException,
+        RoleNotFoundException,
       );
       expect(mockRolesService.findByName).toHaveBeenCalledWith(RolesEnum.USER);
     });

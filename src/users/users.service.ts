@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { NullableType } from '../utils/types/nullable.type';
 import { IPaginationOptions } from 'src/utils/interfaces/pagination-options.interface';
 import { UserRepository } from './infrastructure/persistence/repositories/user.repository';
@@ -8,6 +8,7 @@ import { FilterUserDto, SortUserDto } from './dto/query-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RolesService } from '../roles/roles.service';
 import { RolesEnum } from 'src/roles/enums/roles.enum';
+import { RoleNotFoundException } from 'src/roles/exceptions/roles.exception';
 
 @Injectable()
 export class UsersService {
@@ -26,9 +27,7 @@ export class UsersService {
 
     const userRole = await this.rolesService.findByName(RolesEnum.USER);
     if (!userRole) {
-      throw new InternalServerErrorException(
-        `${RolesEnum.USER} role not found`,
-      );
+      throw new RoleNotFoundException();
     }
     user.role = userRole;
 

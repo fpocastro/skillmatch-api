@@ -1,6 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { ClassConstructor } from 'class-transformer/types/interfaces';
+import { ValidationError } from './exceptions/app.exception';
 
 function validateConfig<T extends object>(
   config: Record<string, unknown>,
@@ -14,7 +15,7 @@ function validateConfig<T extends object>(
   });
 
   if (errors.length > 0) {
-    throw new Error(errors.toString());
+    throw new ValidationError(errors.toString());
   }
   return validatedConfig;
 }

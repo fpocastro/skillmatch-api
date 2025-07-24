@@ -7,6 +7,7 @@ import { UserEntity } from '../entities/user.entity';
 import { User } from 'src/users/domain/user';
 import { UserMapper } from '../mapper/user.mapper';
 import { FilterUserDto, SortUserDto } from 'src/users/dto/query-user.dto';
+import { UserNotFoundException } from 'src/users/exceptions/users.exception';
 
 @Injectable()
 export class UserRepository {
@@ -109,7 +110,7 @@ export class UserRepository {
     });
 
     if (!entity) {
-      throw new Error('User not found');
+      throw new UserNotFoundException();
     }
 
     const updatedEntity = await this.userRepository.save(
